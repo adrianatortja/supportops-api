@@ -1,17 +1,27 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Ticket
 from .serializers import TicketSerializer
 from .services import generate_suggested_reply
+
 
 
 class TicketListCreateView(generics.ListCreateAPIView):
     serializer_class = TicketSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ["status", "category", "priority"]
+    search_fields = ["title", "description"]
+    ordering_fields = ["created_at", "updated_at", "priority", "status"]
+    ordering = ["-created_at"]
+
     def get_queryset(self):
-        return Ticket.objects.filter(user=self.request.user).order_by('-created_at')
+        return Ticket.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -29,7 +39,7 @@ class SuggestedReplyView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, pk):
-        ticket = Ticket.objects.get(pk=pk, user=request.user)
+        ticket = get_object_or_404(Ticket, pk=pk, user=request.user)
         suggested_reply = generate_suggested_reply(ticket.category)
 
         return Response({
