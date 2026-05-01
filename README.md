@@ -334,12 +334,12 @@ It demonstrates:
 - Automated testing
 - API documentation
 - Git/GitHub workflow
+- Add GitHub Actions CI
 
 ---
 
 ## Future Improvements
 
-- Add GitHub Actions CI
 - Add PostgreSQL
 - Add Celery and Redis for background tasks
 - Add frontend with React
