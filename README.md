@@ -1,4 +1,5 @@
 # SupportOps API
+![Django Tests](https://github.com/adrianatortja/supportops-api/actions/workflows/django.yml/badge.svg)
 
 A Django REST Framework API for support ticket automation.
 
