@@ -18,6 +18,8 @@ SupportOps API allows users to create and manage support tickets while automatic
 - Automatic priority detection
 - Suggested reply endpoint
 - Ticket analytics endpoint
+- Filtering, search, and ordering
+- Automated API tests
 - Swagger/OpenAPI documentation
 - Django admin
 
@@ -68,6 +70,70 @@ SupportOps API allows users to create and manage support tickets while automatic
 
 ---
 
+## Ticket Filtering, Search, and Ordering
+
+The ticket list endpoint supports filtering, search, and ordering.
+
+Endpoint:
+
+```http
+GET /api/tickets/
+```
+
+### Filtering
+
+Filter tickets by status:
+
+```http
+GET /api/tickets/?status=open
+```
+
+Filter tickets by category:
+
+```http
+GET /api/tickets/?category=shipping
+```
+
+Filter tickets by priority:
+
+```http
+GET /api/tickets/?priority=high
+```
+
+### Search
+
+Search tickets by subject or message:
+
+```http
+GET /api/tickets/?search=refund
+```
+
+```http
+GET /api/tickets/?search=order
+```
+
+### Ordering
+
+Order tickets by creation date:
+
+```http
+GET /api/tickets/?ordering=-created_at
+```
+
+Order tickets by priority:
+
+```http
+GET /api/tickets/?ordering=priority
+```
+
+Order tickets by status:
+
+```http
+GET /api/tickets/?ordering=status
+```
+
+---
+
 ## Example Ticket Response
 
 ```json
@@ -114,6 +180,32 @@ SupportOps API allows users to create and manage support tickets while automatic
   "technical_tickets": 0,
   "general_tickets": 0
 }
+```
+
+---
+
+## Automated Tests
+
+This project includes automated API tests for the ticket endpoints.
+
+Current test coverage includes:
+
+- Creating a ticket
+- Listing only the authenticated user's tickets
+- Retrieving ticket details
+- Returning `404 Not Found` for invalid suggested reply requests
+- Returning correct analytics counts
+
+Run tests with:
+
+```bash
+python manage.py test
+```
+
+Or run only ticket tests with:
+
+```bash
+python manage.py test tickets
 ```
 
 ---
@@ -235,8 +327,10 @@ It demonstrates:
 - Protected endpoints
 - User-based data ownership
 - CRUD operations
+- Filtering, search, and ordering
 - Business logic
 - Analytics
+- Automated testing
 - API documentation
 - Git/GitHub workflow
 
@@ -244,10 +338,8 @@ It demonstrates:
 
 ## Future Improvements
 
+- Add GitHub Actions CI
 - Add PostgreSQL
-- Add automated API tests
-- Add filtering, search, and ordering
 - Add Celery and Redis for background tasks
 - Add frontend with React
 - Add Docker support
-- Add GitHub Actions CI
